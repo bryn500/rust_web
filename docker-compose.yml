@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  web-app:
+    build:
+      context: ./web-app
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:8080
+  api:
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile
+    ports:
+      - 9000:8080
