@@ -14,7 +14,7 @@ use actix_files as fs;
 async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("debug"));
     log::info!("starting HTTP server at http://localhost:8080");
-    println!("Current working directory: {:?}", std::env::current_dir());
+    log::info!("Current working directory: {:?}", std::env::current_dir());
 
     HttpServer::new(|| {
         App::new()
@@ -32,7 +32,7 @@ async fn main() -> std::io::Result<()> {
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("0.0.0.0", 8080))?
     .run()
     .await
 }

@@ -1,11 +1,13 @@
 FROM rust:1.72.0 as build
-WORKDIR /usr/src/rust_web
+WORKDIR /app
 
 # Copy Cargo files
 COPY ./Cargo.toml .
 COPY ./Cargo.lock .
 
-# Create fake main.rs file in src and build to cache dependencies
+# Create fake main.rs file in src and build
+# this caches the downloading of dependencies unless they change
+# the cache will not be invalidated if main is changed
 RUN mkdir ./src && echo 'fn main() { }' > ./src/main.rs
 RUN cargo build --release
 
@@ -21,7 +23,14 @@ RUN cargo build --release
 
 # copy built files to lightweight google image expose port and run
 FROM gcr.io/distroless/cc-debian12
-COPY --from=build /usr/src/rust_web/target/release/rust_web /usr/local/bin/
-WORKDIR /usr/local/bin
+#FROM debian:latest 
+WORKDIR /app
+
+COPY --from=build /app/target/release/rust_web .
+COPY ./static ./static
+COPY ./templates ./templates
+
+# RUN ls && echo "----"
+
 EXPOSE 8080
-CMD ["rust_web"]
+CMD ["./rust_web"]

@@ -8,7 +8,7 @@ pub async fn index(tera: web::Data<Tera>) -> Result<impl Responder, Error> {
     log::info!("serving index");
     let mut context = Context::new();
     context.insert("title", "Home");
-    let path = stdPath::new("src/markdown/test.md");
+    let path = stdPath::new("templates/markdown/test.md");
     let result = markdown::file_to_html(path).map_err(error::ErrorInternalServerError)?;
     context.insert("markdown", &result);
 
@@ -19,7 +19,7 @@ pub async fn index(tera: web::Data<Tera>) -> Result<impl Responder, Error> {
 #[get("/old")]
 pub async fn old() -> Result<impl Responder, Error> {
     log::info!("serving old");
-    let path = stdPath::new("src/markdown/test.md");
+    let path = stdPath::new("templates/markdown/test.md");
 
     let result = markdown::file_to_html(path).map_err(error::ErrorInternalServerError)?;
     Ok(HttpResponse::Ok().body(result))
@@ -59,7 +59,7 @@ pub mod integration_tests {
 
     #[test]
     async fn test_markdown_from_file() {
-        let path = Path::new("src/markdown/test.md");
+        let path = Path::new("templates/markdown/test.md");
         let result = markdown::file_to_html(path);
 
         match result {
