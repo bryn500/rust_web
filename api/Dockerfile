@@ -3,7 +3,6 @@ WORKDIR /app
 
 # Copy Cargo files
 COPY ./Cargo.toml .
-COPY ./Cargo.lock .
 
 # Create fake main.rs file in src and build
 # this caches the downloading of dependencies unless they change
