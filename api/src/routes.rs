@@ -1,8 +1,20 @@
 use actix_web::{get, post, HttpResponse, Responder};
+use serde::Serialize;
+
+#[derive(Serialize)]
+struct ApiData {
+    message: String,
+    field2: i32,
+}
 
 #[get("/")]
 async fn index() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
+    let response_data = ApiData {
+        message: String::from("Hello, JSON!"),
+        field2: 2,
+    };
+
+    HttpResponse::Ok().json(response_data)
 }
 
 #[post("/echo")]
@@ -25,6 +37,9 @@ pub mod integration_tests {
 
         assert!(res.status().is_success());
         let bytes = actix_http::body::to_bytes(res.into_body()).await.unwrap();
-        assert!(std::str::from_utf8(&bytes).unwrap().contains("Hey there!"));
+        let str = std::str::from_utf8(&bytes).unwrap();
+        assert!(str.contains("\"message\":\"Hello, JSON!\""));
+        assert!(str.contains("\"field2\":2"));
+        assert_eq!(str, "{\"message\":\"Hello, JSON!\",\"field2\":2}")
     }
 }

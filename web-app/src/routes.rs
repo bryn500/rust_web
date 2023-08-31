@@ -1,4 +1,6 @@
-use actix_web::{error, get, post, web, Error, HttpResponse, Responder};
+use actix_web::{error, get, post, web, Error, HttpResponse, Responder, Result};
+use reqwest::Error as ReqwestError;
+use serde::{Deserialize, Serialize};
 use std::path::Path as stdPath;
 use tera::{Context, Tera};
 
@@ -47,6 +49,27 @@ pub async fn echo(req_body: String) -> impl Responder {
 
 pub async fn manual_hello() -> impl Responder {
     HttpResponse::Ok().body("Hey there!")
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+struct ApiResponse {
+    message: String,
+    field2: i32,
+}
+
+async fn fetch_api_data() -> Result<ApiResponse, ReqwestError> {
+    let api_url = "http://127.0.0.1:9000";
+    let response = reqwest::get(api_url).await?;
+    let api_data: ApiResponse = response.json().await?;
+    Ok(api_data)
+}
+
+#[get("/api-data")]
+pub async fn get_api_data() -> impl Responder {
+    match fetch_api_data().await {
+        Ok(api_data) => HttpResponse::Ok().json(api_data),
+        Err(_) => HttpResponse::InternalServerError().finish(),
+    }
 }
 
 #[cfg(test)]
