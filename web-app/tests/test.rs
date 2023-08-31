@@ -17,7 +17,9 @@ pub mod unit_tests {
                 num: (i as i32),
             });
 
-            println!("{}", tests[i].num.to_string());
+            println!("{}", tests[i].num);
+            println!("{}", tests[i].is);
+            println!("{}", tests[i].name);
         }
 
         assert_eq!(1, 1);

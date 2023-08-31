@@ -1,6 +1,5 @@
 use actix_web::{error, get, post, web, Error, HttpResponse, Responder};
 use std::path::Path as stdPath;
-extern crate markdown;
 use tera::{Context, Tera};
 
 #[get("/")]

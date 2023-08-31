@@ -21,16 +21,9 @@ RUN touch -a -m ./src/main.rs
 RUN cargo build --release
 
 
-# copy built files to lightweight google image expose port and run
+# copy built files to lightweight google image expose port and provide start command
 FROM gcr.io/distroless/cc-debian12
-#FROM debian:latest 
 WORKDIR /app
-
-COPY --from=build /app/target/release/rust_web .
-COPY ./static ./static
-COPY ./templates ./templates
-
-# RUN ls && echo "----"
-
+COPY --from=build /app/target/release/api .
 EXPOSE 8080
-CMD ["./rust_web"]
+CMD ["./api"]

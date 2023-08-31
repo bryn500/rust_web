@@ -1,14 +1,6 @@
-extern crate actix_web;
-extern crate markdown;
-
-use actix_web::{middleware, web, App, HttpServer};
-
+use actix_web::{middleware, App, HttpServer};
 mod routes;
-mod template;
 use routes::*;
-use template::TEMPLATES;
-
-use actix_files as fs;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -18,19 +10,9 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .app_data(web::Data::new(TEMPLATES.clone()))
             .wrap(middleware::Logger::default())
-            .wrap(middleware::Compress::default())
-            .service(
-                fs::Files::new("/static", "static/")
-                    .show_files_listing()
-                    .use_last_modified(true),
-            )
             .service(index)
-            .service(old)
-            .service(test)
             .service(echo)
-            .route("/hey", web::get().to(manual_hello))
     })
     .bind(("0.0.0.0", 8080))?
     .run()

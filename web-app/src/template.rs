@@ -1,6 +1,4 @@
 use lazy_static::lazy_static;
-extern crate tera;
-
 use tera::Tera;
 
 lazy_static! {

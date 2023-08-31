@@ -1,6 +1,3 @@
-extern crate actix_web;
-extern crate markdown;
-
 use actix_web::{middleware, web, App, HttpServer};
 
 mod routes;

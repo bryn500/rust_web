@@ -26,11 +26,11 @@ FROM gcr.io/distroless/cc-debian12
 #FROM debian:latest 
 WORKDIR /app
 
-COPY --from=build /app/target/release/rust_web .
+COPY --from=build /app/target/release/web .
 COPY ./static ./static
 COPY ./templates ./templates
 
 # RUN ls && echo "----"
 
 EXPOSE 8080
-CMD ["./rust_web"]
+CMD ["./web"]

@@ -27,7 +27,6 @@
 // }
 
 // // use actix_web::{web, App, HttpServer};
-// // extern crate markdown;
 // // mod routes;
 // // use routes::*;
 
