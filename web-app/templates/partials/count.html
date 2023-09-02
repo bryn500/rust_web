@@ -1,0 +1,8 @@
+{% extends "partial.html" %}
+
+{% block content %}
+<p>New Content</p>
+<button hx-post="/counter" hx-swap="innerHTML transition:true" hx-target="closest div">
+    {{ count }}
+</button>
+{% endblock content %}

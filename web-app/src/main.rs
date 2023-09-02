@@ -28,6 +28,7 @@ async fn main() -> std::io::Result<()> {
             .service(test)
             .service(echo)
             .service(get_api_data)
+            .service(counter)
             .route("/hey", web::get().to(manual_hello))
     })
     .bind(("0.0.0.0", 8080))?

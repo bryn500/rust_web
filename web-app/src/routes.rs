@@ -2,6 +2,7 @@ use actix_web::{error, get, post, web, Error, HttpResponse, Responder, Result};
 use reqwest::Error as ReqwestError;
 use serde::{Deserialize, Serialize};
 use std::path::Path as stdPath;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use tera::{Context, Tera};
 
 #[get("/")]
@@ -70,6 +71,22 @@ pub async fn get_api_data() -> impl Responder {
         Ok(api_data) => HttpResponse::Ok().json(api_data),
         Err(_) => HttpResponse::InternalServerError().finish(),
     }
+}
+
+static COUNTER: AtomicUsize = AtomicUsize::new(0);
+
+fn increment_counter() -> usize {
+    // Increment the counter
+    COUNTER.fetch_add(1, Ordering::SeqCst)
+}
+
+#[post("/counter")]
+pub async fn counter(tera: web::Data<Tera>) -> Result<impl Responder, Error> {
+    let count = increment_counter();
+    let mut context = Context::new();
+    context.insert("count", &count);
+    let template = tera.render("partials/count.html", &context).expect("Error");
+    Ok(HttpResponse::Ok().body(template))
 }
 
 #[cfg(test)]
