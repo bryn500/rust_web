@@ -19,6 +19,10 @@ COPY ./src ./src
 RUN touch -a -m ./src/main.rs
 RUN cargo build --release
 
+# build frontend assets with pnpm
+RUN curl -fsSL https://get.pnpm.io/install.sh | sh -
+RUN pnpm install
+RUN pnpm run build
 
 # copy built files to lightweight google image expose port and run
 FROM gcr.io/distroless/cc-debian12
